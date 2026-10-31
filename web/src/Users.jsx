@@ -1,11 +1,20 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Users() {
   const [users, setUsers] = useState([]);
 
-  fetch('/api/users')
-    .then(response => response.json())
-    .then(data => setUsers(data));
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadUsers() {
+      const response = await fetch('/api/users');
+      const data = await response.json();
+      if (!ignore) setUsers(data);
+    }
+
+    loadUsers();
+    return () => { ignore = true; };
+  }, []);
 
   return (
     <section aria-label="Utilisateurs" className="mt-8">
