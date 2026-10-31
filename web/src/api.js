@@ -1,6 +1,7 @@
-export async function request(path, { method = 'GET', body } = {}) {
+export async function request(path, { token, method = 'GET', body } = {}) {
   const headers = {};
   if (body) headers['Content-Type'] = 'application/json';
+  if (token) headers.Authorization = `Bearer ${token}`;
 
   const response = await fetch(path, {
     method,

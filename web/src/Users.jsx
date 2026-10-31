@@ -3,7 +3,7 @@ import { request } from './api.js';
 import UserForm from './UserForm.jsx';
 import UserRow from './UserRow.jsx';
 
-export default function Users() {
+export default function Users({ token }) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -16,7 +16,7 @@ export default function Users() {
       setLoading(true);
       setError('');
       try {
-        const data = await request('/api/users');
+        const data = await request('/api/users', { token });
         if (!ignore) setUsers(data);
       } catch (loadError) {
         if (!ignore) setError(loadError.message);
@@ -27,20 +27,20 @@ export default function Users() {
 
     loadUsers();
     return () => { ignore = true; };
-  }, [attempt]);
+  }, [token, attempt]);
 
   async function handleAdd(values) {
-    const user = await request('/api/users', { method: 'POST', body: values });
+    const user = await request('/api/users', { token, method: 'POST', body: values });
     setUsers(previous => [...previous, user]);
   }
 
   async function handleSave(id, values) {
-    const saved = await request(`/api/users/${id}`, { method: 'PUT', body: values });
+    const saved = await request(`/api/users/${id}`, { token, method: 'PUT', body: values });
     setUsers(previous => previous.map(user => (user.id === id ? saved : user)));
   }
 
   async function handleDelete(id) {
-    await request(`/api/users/${id}`, { method: 'DELETE' });
+    await request(`/api/users/${id}`, { token, method: 'DELETE' });
     setUsers(previous => previous.filter(user => user.id !== id));
   }
 

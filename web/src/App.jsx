@@ -16,7 +16,7 @@ export default function App() {
           </div>
         )}
       </header>
-      {session ? <Users /> : <LoginForm onLogin={setSession} />}
+      {session ? <Users token={session.token} /> : <LoginForm onLogin={setSession} />}
     </main>
   );
 }
