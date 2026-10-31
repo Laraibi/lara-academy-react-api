@@ -8,6 +8,7 @@ export default function Users({ token }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [attempt, setAttempt] = useState(0);
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     let ignore = false;
@@ -44,9 +45,15 @@ export default function Users({ token }) {
     setUsers(previous => previous.filter(user => user.id !== id));
   }
 
+  const search = query.trim().toLowerCase();
+  const visibleUsers = users.filter(user => user.nom.toLowerCase().includes(search));
+
   return (
     <div className="mt-8 grid gap-7 lg:grid-cols-[2fr_1fr]">
       <section aria-label="Utilisateurs">
+        <label className="font-semibold">Chercher un utilisateur
+          <input className="mt-2 mb-5 block w-full rounded-xl border border-indigo-300/40 bg-surface p-3 text-copy" type="search" value={query} onChange={event => setQuery(event.target.value)} />
+        </label>
         {loading && <p className="text-muted">Chargement…</p>}
         {!loading && error && (
           <div role="alert" className="rounded-xl border border-red-300/40 p-4">
@@ -54,9 +61,10 @@ export default function Users({ token }) {
             <button className="mt-3 cursor-pointer rounded-lg bg-accent px-4 py-2 font-semibold text-ink" onClick={() => setAttempt(value => value + 1)}>Réessayer</button>
           </div>
         )}
-        {!loading && !error && (
+        {!loading && !error && visibleUsers.length === 0 && <p className="text-muted">Aucun utilisateur trouvé.</p>}
+        {!loading && !error && visibleUsers.length > 0 && (
           <ul className="space-y-3">
-            {users.map(user => (
+            {visibleUsers.map(user => (
               <UserRow key={user.id} user={user} onSave={handleSave} onDelete={handleDelete} />
             ))}
           </ul>
