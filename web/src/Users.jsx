@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { request } from './api.js';
 import UserForm from './UserForm.jsx';
 
 export default function Users() {
@@ -14,9 +15,7 @@ export default function Users() {
       setLoading(true);
       setError('');
       try {
-        const response = await fetch('/api/users');
-        if (!response.ok) throw new Error(`Erreur ${response.status}`);
-        const data = await response.json();
+        const data = await request('/api/users');
         if (!ignore) setUsers(data);
       } catch (loadError) {
         if (!ignore) setError(loadError.message);
@@ -30,14 +29,8 @@ export default function Users() {
   }, [attempt]);
 
   async function handleAdd(values) {
-    const response = await fetch('/api/users', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(values),
-    });
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error);
-    setUsers(previous => [...previous, data]);
+    const user = await request('/api/users', { method: 'POST', body: values });
+    setUsers(previous => [...previous, user]);
   }
 
   return (
