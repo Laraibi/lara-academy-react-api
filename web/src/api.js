@@ -14,5 +14,5 @@ export async function request(path, { method = 'GET', body } = {}) {
     error.status = response.status;
     throw error;
   }
-  return response.json();
+  return response.status === 204 ? null : response.json();
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { request } from './api.js';
 import UserForm from './UserForm.jsx';
+import UserRow from './UserRow.jsx';
 
 export default function Users() {
   const [users, setUsers] = useState([]);
@@ -33,6 +34,16 @@ export default function Users() {
     setUsers(previous => [...previous, user]);
   }
 
+  async function handleSave(id, values) {
+    const saved = await request(`/api/users/${id}`, { method: 'PUT', body: values });
+    setUsers(previous => previous.map(user => (user.id === id ? saved : user)));
+  }
+
+  async function handleDelete(id) {
+    await request(`/api/users/${id}`, { method: 'DELETE' });
+    setUsers(previous => previous.filter(user => user.id !== id));
+  }
+
   return (
     <div className="mt-8 grid gap-7 lg:grid-cols-[2fr_1fr]">
       <section aria-label="Utilisateurs">
@@ -46,10 +57,7 @@ export default function Users() {
         {!loading && !error && (
           <ul className="space-y-3">
             {users.map(user => (
-              <li key={user.id} className="rounded-xl border border-white/10 bg-panel p-4">
-                <p className="font-semibold">{user.nom}</p>
-                <p className="text-muted">{user.email}</p>
-              </li>
+              <UserRow key={user.id} user={user} onSave={handleSave} onDelete={handleDelete} />
             ))}
           </ul>
         )}
