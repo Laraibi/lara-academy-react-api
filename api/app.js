@@ -1,11 +1,15 @@
 import 'dotenv/config';
 import express from 'express';
 import { router as usersRouter } from './routes/users.js';
+import { router as authRouter } from './routes/auth.js';
+
+if (!process.env.JWT_SECRET) throw new Error('JWT_SECRET manque dans .env');
 
 const app = express();
 app.use(express.json());
 
 app.use('/api/users', usersRouter);
+app.use('/api', authRouter);
 
 app.use((req, res) => res.status(404).json({ error: 'Route introuvable.' }));
 
