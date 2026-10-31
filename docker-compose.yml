@@ -1,0 +1,8 @@
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: lara_crud
+    ports:
+      - "127.0.0.1:3307:3306"

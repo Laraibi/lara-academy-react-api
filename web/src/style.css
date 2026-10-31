@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #0d1321;
+  --color-panel: #151b30;
+  --color-surface: #1e2542;
+  --color-accent: #ffc107;
+  --color-copy: #f4f6fb;
+  --color-muted: #b9c1de;
+}
+
+@layer base {
+  body { @apply m-0 min-h-screen bg-ink font-sans text-copy antialiased; }
+}
