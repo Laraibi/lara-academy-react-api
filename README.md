@@ -5,10 +5,10 @@
 
 ## Récupérer le code
 
-Adresse du dépôt public : **à renseigner**.
+Adresse du dépôt public : https://github.com/Laraibi/lara-academy-react-api
 
 ```sh
-git clone <adresse du dépôt, à renseigner> lara-react-api
+git clone https://github.com/Laraibi/lara-academy-react-api.git lara-react-api
 cd lara-react-api
 ```
 
